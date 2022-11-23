@@ -1,4 +1,4 @@
-#include "ena.h"
+#include "core.h"
 #include "../logs/logs.cpp"
 #include "../queue/queue.h"
 
@@ -32,4 +32,18 @@ void ENA::Core::_initQueues() {
 
     _eventQueue = new Queue<Event>();
     ENA::Log::debug("Event queue initialized");
+}
+
+ENA::Core::~Core() {
+    delete this->_newton;
+    this->_newton = nullptr;
+
+    delete this->_salvador;
+    this->_salvador = nullptr;
+
+    delete this->_messageQueue;
+    this->_messageQueue = nullptr;
+
+    delete this->_eventQueue;
+    this->_eventQueue = nullptr;
 }

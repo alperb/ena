@@ -19,6 +19,8 @@ namespace ENA {
         void init();
 
     private:
+        void _startEventLoop();
+
         Newton* _newton;
         void _initNewton();
 

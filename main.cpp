@@ -1,4 +1,4 @@
-#include "core/ena.h"
+#include "core/core.h"
 
 int main() {
     ENA::Core core;

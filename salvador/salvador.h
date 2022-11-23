@@ -9,6 +9,8 @@ namespace ENA {
         Salvador& operator=(const Salvador&) = delete;
 
         void init();
+    private:
+        void _render();
     };
 
 }
