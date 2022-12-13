@@ -1,9 +1,1 @@
-#include "core/core.h"
-
-int main() {
-    ENA::Core core;
-
-    core.init();
-
-    return 0;
-}
+#include <GLFW/glfw3.h>
