@@ -1,25 +1,45 @@
-#pragma once
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
 
-#define ASSERT(x) if(!(x)) abort();
+#include "util.h"
+#include "Shader.h"
 
-#define GLCall(x) GLClearError();\
-    x;\
-    ASSERT(GLLogCall(#x, __FILE__, __LINE__));
 
-struct ShaderProgramSource {
-    std::string VertexSource;
-    std::string FragmentSource;
-};
+Shader::Shader(const std::string& filepath) : m_filePath(filepath), m_rendererID(0) {
+    ShaderProgramSource src = parseShader();
+    this->m_rendererID = createShader(src.VertexSource, src.FragmentSource);
+}
 
-ShaderProgramSource parseShader(const std::string& filepath) {
-    std::ifstream stream(filepath);
+Shader::~Shader() {
+    GLCall(glDeleteProgram(this->m_rendererID));
+}
+
+void Shader::bind() const {
+    GLCall(glUseProgram(this->m_rendererID));
+}
+
+void Shader::unbind() const {
+    GLCall(glUseProgram(0));
+}
+
+void Shader::setUniform4f(const std::string& name, float v0, float v1, float v2, float v3) {
+    GLCall(glUniform4f(getUniformLocation(name), v0, v1, v2, v3));
+}
+
+int Shader::getUniformLocation(const std::string& name) {
+    GLCall(int location = glGetUniformLocation(this->m_rendererID, name.c_str()));
+    if(location == -1) {
+        std::cout << "Warning: uniform '" << name << "' doesn't exist!" << std::endl;
+    }
+    return location;
+}
+
+ShaderProgramSource Shader::parseShader() {
+    std::ifstream stream(this->m_filePath);
     enum class ShaderType {
         NONE = -1, VERTEX = 0, FRAGMENT = 1
     };
@@ -42,28 +62,7 @@ ShaderProgramSource parseShader(const std::string& filepath) {
     return {ss[0].str(), ss[1].str()};
 }
 
-
-void GLClearError() {
-    while(glGetError() != GL_NO_ERROR);
-}
-bool GLLogCall(const char* function, const char* file, int line) {
-    while(GLenum error = glGetError()) {
-        std::cout << "[OpenGL Error] (" << error <<  ")\n";
-        std::cout << "Function: " << function << std::endl;
-        std::cout << "File: " << file << std::endl;
-        std::cout << "Line: " << line << std::endl;
-        return false;
-    }
-    return true;
-}
-
-void GLCheckError() {
-    while(GLenum error = glGetError()) {
-        std::cout << "[OpenGL Error] (" << error <<  ")\n";
-    }
-}
-
-unsigned int compileShader(const std::string& source, unsigned int type) {
+unsigned int Shader::compileShader(const std::string& source, unsigned int type) {
     GLCall(unsigned int id = glCreateShader(type));
     const char* src = source.c_str();
     GLCall(glShaderSource(id, 1, &src, nullptr));
@@ -85,7 +84,7 @@ unsigned int compileShader(const std::string& source, unsigned int type) {
     return id;
 }
 
-unsigned int createShader(const std::string& vertexShader, const std::string& fragmentShader){
+unsigned int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader){
     unsigned int program = glCreateProgram();
     unsigned int vs = compileShader(vertexShader, GL_VERTEX_SHADER);
     unsigned int fs = compileShader(fragmentShader, GL_FRAGMENT_SHADER);

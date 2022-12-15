@@ -8,11 +8,12 @@
 #include <string>
 #include <sstream>
 
-#include "Util.hpp"
+#include "util.h"
 
-#include "VertexBuffer.hpp"
-#include "IndexBuffer.hpp"
-#include "VertexArray.hpp"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+#include "VertexArray.h"
+#include "Shader.h"
 
 void catcherr(int c, const char* m) {
     std::cout << "CODE: " << c << std::endl;
@@ -80,17 +81,18 @@ int main(void)
     
     IndexBuffer ib(indices, 6);
 
-    ShaderProgramSource src = parseShader("resources/shaders/basic.shader");
-    unsigned int shader = createShader(src.VertexSource, src.FragmentSource);
-    GLCall(glUseProgram(shader));
+    // ShaderProgramSource src = parseShader("resources/shaders/basic.shader");
+    // unsigned int shader = createShader(src.VertexSource, src.FragmentSource);
+    Shader shader("resources/shaders/basic.shader");
+    shader.bind();
 
-    GLCall(int location = glGetUniformLocation(shader, "u_Color"));
-    ASSERT(location != -1);
+    shader.setUniform4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
 
     va.unbind();
-    GLCall(glUseProgram(0));
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+    shader.unbind();
+    vb.unbind();
+    ib.unbind();
+
     float r = 0.0f;
     float increment = 0.05f;
 
@@ -101,8 +103,8 @@ int main(void)
 
         /* Render here */
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
-        GLCall(glUseProgram(shader));
-        GLCall(glUniform4f(location, r, 1.0f, 0.0f, 1.0f));
+        shader.bind();
+        shader.setUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 
         va.bind();
         ib.bind();
@@ -123,8 +125,6 @@ int main(void)
         /* Poll for and process events */
         GLCall(glfwPollEvents());
     }
-
-    GLCall(glDeleteProgram(shader));
 
     glfwTerminate();
     return 0;
