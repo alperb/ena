@@ -1,7 +1,7 @@
 #include <iostream>
 
-#define GLFW_INCLUDE_NONE
-#define GLEW_STATIC
+// #define GLFW_INCLUDE_NONE
+// #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <fstream>
@@ -14,6 +14,18 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Renderer.h"
+#include "Texture.h"
+#include "Input.h"
+
+#include "Object.hpp"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+
+
+
 
 void catcherr(int c, const char* m) {
     std::cout << "CODE: " << c << std::endl;
@@ -32,7 +44,7 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwSetErrorCallback(catcherr);
-    window = glfwCreateWindow(640, 480, "Sabanci Run", NULL, NULL);
+    window = glfwCreateWindow(960, 540, "Sabanci Run", NULL, NULL);
     if (!window)
     {
         std::cout << "a" << std::endl;
@@ -61,63 +73,41 @@ int main(void)
 
     
     // std::cout << glfwGetVersionString() << std::endl;
-    float positions[8] = {
-        0.0f,  0.0f, // 0
-        0.0f,  0.5f, // 1
-        0.5f,  0.0f, // 2
-        0.5f, 0.5f, // 3
+    float positions[] = {
+        -50.0f,  -50.0f, 0.0f, 0.0f, // 0
+        50.0f,  -50.0f, 1.0f, 0.0f, // 1
+        50.0f,  50.0f, 1.0f, 1.0f,// 2
+        -50.0f,  50.0f, 0.0f, 1.0f// 3
     };
 
     unsigned int indices[6] = {
         0, 1, 2,
-        2, 1, 3
+        2, 3, 0
     };
-    VertexArray va;
-    VertexBuffer vb(positions, 4 * 2 * sizeof(float));
-    
-    VertexBufferLayout layout;
-    layout.push<float>(2);
-    va.addBuffer(vb, layout);
-    
-    IndexBuffer ib(indices, 6);
 
-    // ShaderProgramSource src = parseShader("resources/shaders/basic.shader");
-    // unsigned int shader = createShader(src.VertexSource, src.FragmentSource);
-    Shader shader("resources/shaders/basic.shader");
-    shader.bind();
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+    GLCall(glEnable(GL_BLEND));
 
-    shader.setUniform4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
+    glfwSetKeyCallback(window, Input::onKeyPress);
 
-    va.unbind();
-    shader.unbind();
-    vb.unbind();
-    ib.unbind();
+    Object obj(positions, indices, "resources/shaders/sphere.shader");
 
     float r = 0.0f;
     float increment = 0.05f;
 
+    Renderer renderer;
+    
+    glm::vec3 translation(200, 200, 0);
+    
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-
-
         /* Render here */
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));
-        shader.bind();
-        shader.setUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+        renderer.clear();
 
-        va.bind();
-        ib.bind();
 
-        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-
-        if(r > 1.0f) {
-            increment = -0.05f;
-        } else if(r < 0.0f) {
-            increment = 0.05f;
-        }
-
-        r += increment;
+        obj.render();
 
         /* Swap front and back buffers */
         GLCall(glfwSwapBuffers(window));
