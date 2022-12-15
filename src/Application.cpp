@@ -7,11 +7,11 @@
 #include <string>
 #include <sstream>
 
-#include "Util.cpp"
+#include "Util.hpp"
 
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
-
+#include "VertexArray.hpp"
 
 int main(void)
 {
@@ -21,7 +21,6 @@ int main(void)
     if (!glfwInit())
         return -1;
 
-    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
 
     /* Create a windowed mode window and its OpenGL context */
@@ -31,16 +30,19 @@ int main(void)
         glfwTerminate();
         return -1;
     }
+    
+    GLCall(glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE));
 
     /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
-
+    GLCall(glfwMakeContextCurrent(window));
+    GLCall(glfwSwapInterval(1));
+    glewExperimental = GL_TRUE; 
     if(glewInit() != GLEW_OK) {
-        std::cout << "Error!" << std::endl;
+        std::cout << "Could not initalize OpenGL" << std::endl;
+        return -1;
     }
 
-    float positions[12] = {
+    float positions[8] = {
         0.0f,  0.0f, // 0
         0.0f,  0.5f, // 1
         0.5f,  0.0f, // 2
@@ -51,25 +53,26 @@ int main(void)
         0, 1, 2,
         2, 1, 3
     };
-
-    unsigned int vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-
+    
+    std::cout << "a" << std::endl;
+    VertexArray va;
+    std::cout << "b" << std::endl;
     VertexBuffer vb(positions, 4 * 2 * sizeof(float));
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
-
+    VertexBufferLayout layout;
+    layout.push<float>(2);
+    va.addBuffer(vb, layout);
     IndexBuffer ib(indices, 6);
 
     ShaderProgramSource src = parseShader("resources/shaders/basic.shader");
     unsigned int shader = createShader(src.VertexSource, src.FragmentSource);
-    glUseProgram(shader);
+    GLCall(glUseProgram(shader));
 
-    int location = glGetUniformLocation(shader, "u_Color");
-    assert(location != -1);
+    GLCall(int location = glGetUniformLocation(shader, "u_Color"));
+    ASSERT(location != -1);
+    va.unbind();
+    GLCall(glUseProgram(0));
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
     float r = 0.0f;
     float increment = 0.05f;
 
@@ -79,16 +82,14 @@ int main(void)
 
 
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
-        glUseProgram(shader);
-        glUniform4f(location, r, 1.0f, 0.0f, 1.0f);
+        GLCall(glClear(GL_COLOR_BUFFER_BIT));
+        GLCall(glUseProgram(shader));
+        GLCall(glUniform4f(location, r, 1.0f, 0.0f, 1.0f));
 
-
-
-        glBindVertexArray(vao);
+        va.bind();
         ib.bind();
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
         if(r > 1.0f) {
             increment = -0.05f;
@@ -99,13 +100,13 @@ int main(void)
         r += increment;
 
         /* Swap front and back buffers */
-        glfwSwapBuffers(window);
+        GLCall(glfwSwapBuffers(window));
 
         /* Poll for and process events */
-        glfwPollEvents();
+        GLCall(glfwPollEvents());
     }
 
-    glDeleteProgram(shader);
+    GLCall(glDeleteProgram(shader));
 
     glfwTerminate();
     return 0;
