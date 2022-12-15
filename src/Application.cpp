@@ -1,5 +1,6 @@
 #include <iostream>
 
+#define GLFW_INCLUDE_NONE
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -13,35 +14,52 @@
 #include "IndexBuffer.hpp"
 #include "VertexArray.hpp"
 
+void catcherr(int c, const char* m) {
+    std::cout << "CODE: " << c << std::endl;
+    std::cout << "Error: " << m << std::endl;
+}
+
 int main(void)
 {
     GLFWwindow* window;
 
     /* Initialize the library */
-    if (!glfwInit())
-        return -1;
-
+    if (!glfwInit()) return -1;
     
-
-    /* Create a windowed mode window and its OpenGL context */
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwSetErrorCallback(catcherr);
     window = glfwCreateWindow(640, 480, "Sabanci Run", NULL, NULL);
     if (!window)
     {
+        std::cout << "a" << std::endl;
         glfwTerminate();
         return -1;
     }
+
+    int major, minor, rev;
+
+    glfwGetVersion(&major, &minor, &rev);
+
+    std::cout <<  "OpenGL version recieved:" <<  major <<  minor << rev << std::endl;
     
-    GLCall(glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE));
+
+    
 
     /* Make the window's context current */
-    GLCall(glfwMakeContextCurrent(window));
-    GLCall(glfwSwapInterval(1));
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);
+
     glewExperimental = GL_TRUE; 
     if(glewInit() != GLEW_OK) {
         std::cout << "Could not initalize OpenGL" << std::endl;
         return -1;
     }
 
+    
+    // std::cout << glfwGetVersionString() << std::endl;
     float positions[8] = {
         0.0f,  0.0f, // 0
         0.0f,  0.5f, // 1
@@ -53,14 +71,13 @@ int main(void)
         0, 1, 2,
         2, 1, 3
     };
-    
-    std::cout << "a" << std::endl;
     VertexArray va;
-    std::cout << "b" << std::endl;
     VertexBuffer vb(positions, 4 * 2 * sizeof(float));
+    
     VertexBufferLayout layout;
     layout.push<float>(2);
     va.addBuffer(vb, layout);
+    
     IndexBuffer ib(indices, 6);
 
     ShaderProgramSource src = parseShader("resources/shaders/basic.shader");
@@ -69,6 +86,7 @@ int main(void)
 
     GLCall(int location = glGetUniformLocation(shader, "u_Color"));
     ASSERT(location != -1);
+
     va.unbind();
     GLCall(glUseProgram(0));
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));

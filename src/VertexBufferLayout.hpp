@@ -21,7 +21,7 @@ struct VertexBufferElement {
 
 class VertexBufferLayout {
 public:
-    VertexBufferLayout(){}
+    VertexBufferLayout(): m_Stride(0) {}
 
     template<typename T>
     void push(unsigned int count);
