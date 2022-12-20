@@ -18,8 +18,6 @@
 #include "Texture.h"
 #include "Input.h"
 
-#include "Object.hpp"
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -65,7 +63,7 @@ int main(void)
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 
-    glewExperimental = GL_TRUE; 
+    glewExperimental = GL_TRUE;
     if(glewInit() != GLEW_OK) {
         std::cout << "Could not initalize OpenGL" << std::endl;
         return -1;
@@ -90,7 +88,34 @@ int main(void)
 
     glfwSetKeyCallback(window, Input::onKeyPress);
 
-    Object obj(positions, indices, "resources/shaders/sphere.shader");
+
+
+
+    VertexArray va;
+    VertexBuffer vb(positions, 4 * 4 * sizeof(float));
+    
+    VertexBufferLayout layout;
+    layout.push<float>(2);
+    layout.push<float>(2);
+    va.addBuffer(vb, layout);
+    
+    IndexBuffer ib(indices, 6);
+
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+    glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+    
+    Shader shader("resources/shaders/basic.shader");
+    shader.bind();
+
+    Texture texture("resources/textures/cherno.png");
+    texture.bind();
+    shader.setUniform1i("u_Texture", 0);
+    
+
+    va.unbind();
+    shader.unbind();
+    vb.unbind();
+    ib.unbind();
 
     float r = 0.0f;
     float increment = 0.05f;
@@ -107,7 +132,13 @@ int main(void)
         renderer.clear();
 
 
-        obj.render();
+        va.bind();
+        shader.bind();
+        vb.bind();
+        ib.bind();
+
+        shader.setUniformMat4f("u_MVP", proj * view * glm::translate(glm::mat4(1.0f), translation));
+        renderer.draw(va, ib, shader);
 
         /* Swap front and back buffers */
         GLCall(glfwSwapBuffers(window));

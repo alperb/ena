@@ -26,7 +26,6 @@ private:
     unsigned int compileShader(const std::string& source, unsigned int type);
     unsigned int createShader(const std::string& vertexShader, const std::string& fragmentShader);
     ShaderProgramSource parseShader();
-    bool compileShader();
     std::string m_filePath;
     unsigned int m_rendererID;
     // caching for uniforms
