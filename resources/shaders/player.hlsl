@@ -9,14 +9,12 @@ uniform mat4 u_MVP;
 
 out vec3 v_Normal;
 out vec3 v_localPosition;
-out vec2 v_TexCoord;
 
 void main()
 {
     gl_Position = u_MVP * vec4(position, 1.0);
     v_Normal = normals;
     v_localPosition = position;
-    v_TexCoord = textCoords;
 }
 
 #shader fragment
@@ -26,7 +24,6 @@ out vec4 color;
 
 in vec3 v_Normal;
 in vec3 v_localPosition;
-in vec2 v_TexCoord;
 
 uniform sampler2D u_Texture;
 uniform vec3 u_lightPos;
@@ -34,6 +31,7 @@ uniform vec3 u_viewPos;
 uniform vec4 u_diffuseColor;
 uniform float u_shininess;
 uniform vec4 u_specularColor;
+uniform vec4 u_Color;
 
 void main()
 {
@@ -61,6 +59,5 @@ void main()
 
     vec3 final_color = clamp(ambient + diffuseColor + specularColor, 0.0, 1.0);
 
-    vec4 tex = texture(u_Texture, v_TexCoord);
-    color = tex * vec4(final_color, 1.0);
+    color = u_Color * vec4(final_color, 1.0);
 }

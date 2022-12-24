@@ -13,6 +13,8 @@ public:
 
     inline int getWidth() const { return m_width; }
     inline int getHeight() const { return m_height; }
+
+    inline bool checkIfAvailable() const { return isAvailable; }
 private:
     bool isAvailable;
     unsigned int m_rendererID;

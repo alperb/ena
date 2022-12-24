@@ -52,6 +52,14 @@ glm::mat4 Camera::getViewMatrix() const {
     return glm::lookAt(position, position + direction, up);
 }
 
-glm::mat4 Camera::getMVP() const {
-    return getProjectionMatrix() * getViewMatrix() * glm::mat4(1.0f);
+glm::mat4 Camera::getMVP(glm::mat4 modelVector) const {
+    // TODO: burada bisiler yanlis ama anlamadim
+    return getProjectionMatrix() * getViewMatrix() * modelVector;
+}
+
+glm::vec3 Camera::getLocalPosition(glm::vec3 worldPosition) const {
+    glm::mat4 viewMatrix = getViewMatrix();
+    glm::mat4 inverseViewMatrix = glm::inverse(viewMatrix);
+    glm::vec4 localPosition = inverseViewMatrix * glm::vec4(worldPosition, 1.0f);
+    return glm::vec3(localPosition);
 }

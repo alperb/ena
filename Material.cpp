@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Material.h"
 
 #include "Shader.h"
@@ -13,10 +14,10 @@ Material::~Material() {
     delete texture;
 }
 
-void Material::bind(Camera* camera, glm::vec3 objectPosition) const {
+void Material::bind(Camera* camera, glm::mat4 modelVector) const {
     shader->bind();
     texture->bind();
-    this->setUniforms(camera, objectPosition);
+    this->setUniforms(camera, modelVector);
 }
 
 void Material::unbind() const {

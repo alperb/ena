@@ -26,18 +26,17 @@ Object::~Object() {
 }
 
 void Object::draw(Camera* camera) {
-    material->bind(camera, this->position);
+    material->bind(camera, this->getModelMatrix());
     mesh->draw();
 }
 
-// void Object::draw(Camera* camera) {
-//     va->bind();
-//     vb->bind();
-//     ib->bind();
-//     material->bind(camera, this->position);
-
-//     GLCall(glDrawElements(GL_TRIANGLES, ib->getCount(), GL_UNSIGNED_INT, nullptr));
-// }
+glm::mat4 Object::getModelMatrix() const {
+    // 45 degree rotation around the y axis
+    glm::mat4 rotation = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    // scale the object to its original size
+    glm::mat4 model = glm::scale(rotation, glm::vec3(1.0f));
+    return model;
+}
 
 void Object::setMaterial(Material* material) {
     this->material = material;

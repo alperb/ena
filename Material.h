@@ -8,10 +8,10 @@ class Material {
 public:
     Material(const std::string& shader_path, const std::string& texture_path);
     ~Material();
-    void bind(Camera* camera, glm::vec3 objectPosition) const;
+    void bind(Camera* camera, glm::mat4 modelVector) const;
     void unbind() const;
 
-    virtual void setUniforms(Camera* camera, glm::vec3 objectPosition) const = 0;
+    virtual void setUniforms(Camera* camera, glm::mat4 modelVector) const = 0;
 
     glm::vec3 getAmbient() const { return ambient; }
     glm::vec3 getDiffuse() const { return diffuse; }

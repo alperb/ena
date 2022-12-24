@@ -16,6 +16,7 @@ public:
     bool isLightSource() const;
 
     glm::vec3 getPosition() const;
+    glm::mat4 getModelMatrix() const;
 protected:
     Material* material;
     Mesh* mesh;

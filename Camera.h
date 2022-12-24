@@ -20,9 +20,11 @@ public:
     glm::mat4 getProjectionMatrix() const;
     glm::mat4 getViewMatrix() const;
 
-    glm::mat4 getMVP() const;
+    glm::mat4 getMVP(glm::mat4 modelVector) const;
 
     void setScreenSize(int width, int height);
+
+    glm::vec3 getLocalPosition(glm::vec3 worldPosition) const;
 private:
     glm::vec3 position;
     glm::vec3 lookAt;
