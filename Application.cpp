@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 
 #include "Renderer.h"
-#include "util.h"
+#include "Util.h"
 #include "Input.h"
 
 #include "Application.h"
@@ -51,41 +51,35 @@ Application::~Application() {
 }
 
 void Application::run() {
+    double now = glfwGetTime();
     while (!glfwWindowShouldClose(this->window))
     {
-        /* Render here */
-        Renderer::Clear();
-        Renderer::Render(*(this->currentScene));
+        auto renderDiff = now - lastRenderTime;
+        if(renderDiff > renderInterval) {
+            lastRenderTime += renderInterval;
+
+            /* Render here */
+            Renderer::Clear();
+            Renderer::Render(*(this->currentScene));
+            printFPS();
+        }
         /* Swap front and back buffers */
         GLCall(glfwSwapBuffers(window));
-
-        /* Poll for and process events */
+        
         runUpdate();
-
-        printFPS();
     }
 }
 
 void Application::printFPS() const {
     static int frameCount = 0;
-    static double previousSeconds = 0.0;
-    double elapsedSeconds;
-    double currentSeconds = glfwGetTime(); // returns number of seconds since glfwInit()
-
-    elapsedSeconds = currentSeconds - previousSeconds;
-
-    // limit text updates to 4 per second
-    if (elapsedSeconds > 0.25) {
-        previousSeconds = currentSeconds;
-        double fps = (double)frameCount / elapsedSeconds;
-        double msPerFrame = 1000.0 / fps;
-
-        std::cout << msPerFrame << "ms/frame (" << fps << " FPS)" << std::endl;
-
-        frameCount = 0;
-    }
-
+    static double lastTime = glfwGetTime();
+    double currentTime = glfwGetTime();
     frameCount++;
+    if (currentTime - lastTime >= 1.0) {
+        std::cout << "FPS: " << frameCount << std::endl;
+        frameCount = 0;
+        lastTime += 1.0;
+    }
 }
 
 void Application::runUpdate(){

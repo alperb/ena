@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
-#include "Scene.h"
+#include <chrono>
 #include <vector>
+#include "Scene.h"
 #include <GLFW/glfw3.h>
 
 class Application {
@@ -23,4 +24,7 @@ private:
     std::string title;
     unsigned int width;
     unsigned int height;
+
+    double lastRenderTime;
+    double renderInterval = 1 / 60;
 };

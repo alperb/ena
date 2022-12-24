@@ -1,6 +1,6 @@
 #include "Logger.hpp"
 #include "Object.h"
-#include "util.h"
+#include "Util.h"
 
 
 Object::Object(const std::string meshPath){

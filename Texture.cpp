@@ -1,6 +1,6 @@
 #include <GL/glew.h>
 
-#include "util.h"
+#include "Util.h"
 #include "Texture.h"
 
 #include "vendors/stb_image/stb_image.h"

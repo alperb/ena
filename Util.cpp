@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "util.h"
+#include "Util.h"
 
 void GLClearError() {
     while(glGetError() != GL_NO_ERROR);

@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 
-#include "util.h"
+#include "Util.h"
 #include "Shader.h"
 
 
@@ -108,6 +108,10 @@ unsigned int Shader::createShader(const std::string& vertexShader, const std::st
 
 void Shader::setUniform1i(const std::string& name, unsigned int v0){
     GLCall(glUniform1i(getUniformLocation(name), v0));
+}
+
+void Shader::setUniform1f(const std::string& name, float v0){
+    GLCall(glUniform1f(getUniformLocation(name), v0));
 }
 
 void Shader::setUniform4f(const std::string& name, float v0, float v1, float v2, float v3) {
