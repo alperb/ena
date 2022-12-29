@@ -74,6 +74,10 @@ void Mesh::initSingleMesh(const aiMesh* mesh){
         positions.push_back(pPos->x);
         positions.push_back(pPos->y);
         positions.push_back(pPos->z);
+
+        onlyPositions.push_back(pPos->x);
+        onlyPositions.push_back(pPos->y);
+        onlyPositions.push_back(pPos->z);
         
         positions.push_back(pNormal->x);
         positions.push_back(pNormal->y);
@@ -110,4 +114,8 @@ void Mesh::reserveSpace(){
     texCoords.reserve(numVertices);
     normals.reserve(numVertices);
     indices.reserve(numIndices);
+}
+
+std::vector<float> Mesh::getPositions() const {
+    return onlyPositions;
 }

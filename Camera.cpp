@@ -53,7 +53,6 @@ glm::mat4 Camera::getViewMatrix() const {
 }
 
 glm::mat4 Camera::getMVP(glm::mat4 modelVector) const {
-    // TODO: burada bisiler yanlis ama anlamadim
     return getProjectionMatrix() * getViewMatrix() * modelVector;
 }
 

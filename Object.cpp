@@ -1,26 +1,11 @@
 #include "Logger.hpp"
 #include "Object.h"
-#include "Util.h"
 
 
 Object::Object(const std::string meshPath){
     mesh = new Mesh(meshPath);
+    collider = new Collider(mesh->getPositions());
 }
-
-// Object::Object(const std::vector<float>& positions, const std::vector<unsigned int>& indices): positions(positions), indices(indices) {
-//     va = new VertexArray();
-
-//     vb = new VertexBuffer((void*)(positions.data()), positions.size() * sizeof(float));
-//     ib = new IndexBuffer((unsigned int*)(indices.data()), indices.size());
-//     vbl = new VertexBufferLayout();
-//     vbl->push<float>(3);
-//     vbl->push<float>(3);
-//     va->addBuffer(*vb, *vbl);
-
-//     va->unbind();
-//     vb->unbind();
-//     ib->unbind();
-// }
 
 Object::~Object() {
 }
@@ -30,12 +15,17 @@ void Object::draw(Camera* camera) {
     mesh->draw();
 }
 
+void Object::init(){
+}
+
 glm::mat4 Object::getModelMatrix() const {
+    glm::mat4 translation = glm::translate(glm::mat4(1.0f), this->position);
+
     // 45 degree rotation around the y axis
-    glm::mat4 rotation = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    // scale the object to its original size
-    glm::mat4 model = glm::scale(rotation, glm::vec3(1.0f));
-    return model;
+    glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), this->rotationAngle, this->rotationAxis); //glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f));
+
+    return translation * rotation * scale;
 }
 
 void Object::setMaterial(Material* material) {
@@ -48,5 +38,26 @@ bool Object::isLightSource() const {
 
 glm::vec3 Object::getPosition() const {
     return position;
+}
+
+Collider* Object::getCollider() const {
+    return collider;
+}
+
+void Object::move(glm::vec3 direction) {
+    position += direction;
+}
+
+void Object::createCollider() {
+    collider = new Collider(this->mesh->getPositions());
+}
+
+void Object::updateCollider() {
+    collider->updateBox(this->mesh->getPositions(), this->getModelMatrix());
+}
+
+void Object::update() {
+    this->onUpdate();
+    this->updateCollider();
 }
 

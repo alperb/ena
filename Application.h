@@ -2,8 +2,10 @@
 #include <string>
 #include <chrono>
 #include <vector>
-#include "Scene.h"
-#include <GLFW/glfw3.h>
+#include <iostream>
+
+#include "GameManager.h"
+
 
 class Application {
 public:
@@ -21,6 +23,7 @@ private:
     GLFWwindow* window = nullptr;
     std::vector<Scene*> scenes;
     Scene* currentScene = nullptr;
+    GameManager* gameManager = nullptr;
     std::string title;
     unsigned int width;
     unsigned int height;

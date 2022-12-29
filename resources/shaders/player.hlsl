@@ -35,7 +35,7 @@ uniform vec4 u_Color;
 
 void main()
 {
-    float ambientStrength = 0.1;
+    float ambientStrength = 0.2;
     vec3 lightColor = vec3(1.0, 1.0, 1.0);
     vec3 ambient = ambientStrength * lightColor;
     

@@ -6,9 +6,7 @@
 #include <assimp/postprocess.h>
 
 #include "VertexArray.h"
-#include "VertexBuffer.h"
 #include "IndexBuffer.h"
-#include "VertexBufferLayout.h"
 
 enum BUFFER_TYPE {
     INDEX_BUFFER,
@@ -37,6 +35,7 @@ public:
     ~Mesh();
     void loadMesh();
     void draw();
+    std::vector<float> getPositions() const;
 private:
     void reserveSpace();
     void prepareMeshes(const aiScene* scene);
@@ -56,4 +55,6 @@ private:
     std::vector<float> texCoords;
     std::vector<float> normals;
     std::vector<unsigned int> indices;
+
+    std::vector<float> onlyPositions;
 };

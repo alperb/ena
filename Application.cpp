@@ -1,13 +1,5 @@
-#include <iostream>
-
-#include <GL/glew.h>
-
-#include "Renderer.h"
-#include "Util.h"
-#include "Input.h"
-
 #include "Application.h"
-#include <GLFW/glfw3.h>
+
 
 Application::Application(const std::string& title, unsigned int width, unsigned int height): title(title), width(width), height(height) {
 
@@ -41,8 +33,10 @@ Application::Application(const std::string& title, unsigned int width, unsigned 
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
         GLCall(glEnable(GL_BLEND));
         GLCall(glEnable(GL_DEPTH_TEST));
+
+        gameManager = new GameManager();
         
-        glfwSetKeyCallback(window, Input::onKeyPress);
+        glfwSetKeyCallback(window, GameManager::onKeyPress);
     }
 }
 
@@ -55,12 +49,11 @@ void Application::run() {
     while (!glfwWindowShouldClose(this->window))
     {
         auto renderDiff = now - lastRenderTime;
-        if(renderDiff > renderInterval) {
+        if(renderDiff > this->renderInterval) {
             lastRenderTime += renderInterval;
 
             /* Render here */
-            Renderer::Clear();
-            Renderer::Render(*(this->currentScene));
+            gameManager->render();
             printFPS();
         }
         /* Swap front and back buffers */
@@ -83,7 +76,7 @@ void Application::printFPS() const {
 }
 
 void Application::runUpdate(){
-    currentScene->update();
+    gameManager->update();
     GLCall(glfwPollEvents());
 }
 
@@ -98,6 +91,7 @@ void Application::addScene(Scene* scene) {
 
 void Application::setCurrentScene(Scene* scene) {
     this->currentScene = scene;
+    gameManager->setScene(scene);
 }
 
 Scene* Application::getCurrentScene() {

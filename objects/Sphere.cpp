@@ -6,6 +6,11 @@
 Sphere::Sphere(glm::vec3 center, float radius) : 
     Object("blender/sphere.obj"), 
     center(center), radius(radius) { 
+        this->position = center;
+        this->name = "Sphere";
+        this->speed = 12;
+        this->rotationAngle = glm::radians(45.0f);
+        this->rotationAxis = glm::vec3(-1.0f, 0.0f, 0.0f);
 }
 
 void Sphere::move(glm::vec3 direction) {
@@ -14,7 +19,16 @@ void Sphere::move(glm::vec3 direction) {
 }
 
 void Sphere::onUpdate() {
-    glm::vec3 moveVector = (float)speed * glm::vec3(0.005f, -0.005f, 0.005f);
+    this->rotationAngle += glm::radians(5.0f);
+    glm::vec3 moveVector = (float)speed * glm::vec3(0.0f, 0.0f, 0.01f);
     move(moveVector);
     // std::cout << "x" << center.x << " y" << center.y << " z" << center.z << std::endl;
+}
+
+void Sphere::onCollision(Object* other) {
+    // std::cout << "Sphere collided with " << other << std::endl;
+}
+
+void Sphere::onMoveEvent(Event event) {
+    // std::cout << "Sphere moved" << std::endl;
 }

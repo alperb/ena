@@ -1,5 +1,4 @@
 #include "Renderer.h"
-#include "Util.h"
 
 void Renderer::Render(const Scene& scene) {
     // set screen with and height to the camera

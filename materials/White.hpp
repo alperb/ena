@@ -6,7 +6,7 @@
 
 class WhiteObject : public Material {
 public:
-    WhiteObject(): Material("resources/shaders/basic.hlsl", "resources/textures/cherno.png") {
+    WhiteObject(): Material("resources/shaders/basic.hlsl", "resources/textures/sabanci.png") {
         ambient = glm::vec3(0.7f, 0.2f, 0.6f);
         diffuse = glm::vec3(0.9f, 0.9f, 0.5f);
         specular = glm::vec3(0.5f, 0.5f, 0.5f);

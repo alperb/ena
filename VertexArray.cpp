@@ -1,9 +1,6 @@
 #pragma once
 
-#include "VertexBuffer.h"
-#include "VertexBufferLayout.h"
 #include "VertexArray.h"
-#include "Util.h"
 
 VertexArray::VertexArray(){
     GLCall(glGenVertexArrays(1, &m_rendererID));
