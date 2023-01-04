@@ -25,7 +25,7 @@ public:
         shader->setUniform4f("u_diffuseColor", diffuse.r, diffuse.g, diffuse.b, 1.0f);
         shader->setUniform1f("u_shininess", shininess);
 
-        shader->setUniformVec3f("u_lightPos", camera->getLocalPosition(glm::vec3(3.0f, 1.0f, 0.0f)));
+        shader->setUniformVec3f("u_lightPos", glm::vec3(0.0f, 10.0f, 0.0f));
         shader->setUniformVec3f("u_viewPos", camera->getPosition());
     };
 };

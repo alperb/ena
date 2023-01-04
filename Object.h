@@ -9,7 +9,7 @@
 class Object {
 public:
     Object(std::string meshPath);
-    ~Object();
+    virtual ~Object() = 0;
     void draw(Camera* camera);
 
     void setMaterial(Material* material);
@@ -36,6 +36,7 @@ protected:
     glm::vec3 position;
     float rotationAngle = 0.0f;
     glm::vec3 rotationAxis = glm::vec3(1.0f, 1.0f, 1.0f);
+    glm::vec3 scaleFactor = glm::vec3(1.0f);
 
     bool lightSource = false;
 

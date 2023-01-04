@@ -3,7 +3,7 @@
 class Sphere : public Object {
 public:
     Sphere(glm::vec3 center, float radius);
-    ~Sphere() = default;
+    ~Sphere() override;
 
     void onUpdate() override;
     void move(glm::vec3 direction) override;

@@ -13,10 +13,12 @@ enum MOVE_DIRECTION {
 struct Event {
     int key;
     EVENT_ACTION action;
+    MOVE_DIRECTION direction;
 
-    Event(int key, EVENT_ACTION action) {
+    Event(int key, EVENT_ACTION action, MOVE_DIRECTION direction) {
         this->key = key;
         this->action = action;
+        this->direction = direction;
     }
 
     Event() = default;

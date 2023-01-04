@@ -41,10 +41,17 @@ void Collider::computeBoundingBox(std::vector<float> positions){
 }
 
 bool Collider::isColliding(Collider* other) {
+    if (!isCollidable || !other->isCollidable) {
+        return false;
+    }
     return aabb->isColliding(other->aabb);
 }
 
 void Collider::updateBox(std::vector<float> positions, glm::mat4 modelMatrix) {
     computeBoundingBox(positions);
     aabb->updateBox(modelMatrix);
+}
+
+void Collider::setCollidable(bool collidable) {
+    isCollidable = collidable;
 }

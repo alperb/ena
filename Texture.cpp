@@ -4,11 +4,15 @@
 #include "vendors/stb_image/stb_image.h"
 
 Texture::Texture(const std::string& path): m_filepath(path), m_localBuffer(0), m_width(0), m_height(0), m_BPP(0) {
-    if(path != ""){
+    load();
+}
+
+void Texture::load(){
+    if(m_filepath != ""){
         isAvailable = true;
 
         stbi_set_flip_vertically_on_load(1);
-        m_localBuffer = stbi_load(path.c_str(), &m_width, &m_height, &m_BPP, 4);
+        m_localBuffer = stbi_load(m_filepath.c_str(), &m_width, &m_height, &m_BPP, 4);
 
         GLCall(glGenTextures(1, &m_rendererID));
         GLCall(glBindTexture(GL_TEXTURE_2D, m_rendererID));

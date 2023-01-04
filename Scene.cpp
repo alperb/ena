@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 Scene::Scene() {
-    camera = new Camera(glm::vec3(0.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    camera = new Camera(glm::vec3(0.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 Scene::~Scene() {
@@ -28,6 +28,19 @@ Camera* Scene::getCamera() const {
     return camera;
 }
 
+void Scene::draw() const {
+    glDepthMask(GL_FALSE);
+
+    if (skybox != nullptr) {
+        skybox->draw(camera);
+    }
+
+    glDepthMask(GL_TRUE);
+    for (Object* object : objects) {
+        object->draw(camera);
+    }
+}
+
 void Scene::update() {
     for (Object* object : objects) {
         object->update();
@@ -42,4 +55,8 @@ glm::vec3 Scene::getLightSourcePosition() const {
     }
     
     return glm::vec3(0.0f, 0.0f, 0.0f);
+}
+
+void Scene::setSkybox(Object* skybox) {
+    this->skybox = skybox;
 }

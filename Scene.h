@@ -19,7 +19,10 @@ public:
     void update();
 
     glm::vec3 getLightSourcePosition() const;
+    void setSkybox(Object* skybox);
+    void draw() const;
 private:
     Camera* camera;
     std::vector<Object*> objects;
+    Object* skybox;
 };

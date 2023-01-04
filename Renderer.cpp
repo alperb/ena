@@ -1,12 +1,7 @@
 #include "Renderer.h"
 
 void Renderer::Render(const Scene& scene) {
-    // set screen with and height to the camera
-    // scene.getCamera()->setScreenSize(width, height);
-
-    for (Object* object : scene.getObjects()) {
-        object->draw(scene.getCamera());
-    }
+    scene.draw();
 }
 
 void Renderer::Clear(){

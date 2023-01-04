@@ -6,8 +6,9 @@
 
 class Material {
 public:
-    Material(const std::string& shader_path, const std::string& texture_path);
     ~Material();
+    Material(const std::string& shader_path, const std::string& texture_path);
+    Material(const std::string& shader_path, const std::vector<std::string>& texture_paths);
     void bind(Camera* camera, glm::mat4 modelVector) const;
     void unbind() const;
 

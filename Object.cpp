@@ -8,6 +8,9 @@ Object::Object(const std::string meshPath){
 }
 
 Object::~Object() {
+    delete mesh;
+    delete material;
+    delete collider;
 }
 
 void Object::draw(Camera* camera) {
@@ -23,7 +26,7 @@ glm::mat4 Object::getModelMatrix() const {
 
     // 45 degree rotation around the y axis
     glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), this->rotationAngle, this->rotationAxis); //glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-    glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f));
+    glm::mat4 scale = glm::scale(glm::mat4(1.0f), this->scaleFactor);
 
     return translation * rotation * scale;
 }

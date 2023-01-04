@@ -9,6 +9,8 @@ public:
     Texture(const std::string& path);
     ~Texture();
 
+    virtual void load();
+
     void bind(unsigned int slot = 0) const;
     void unbind() const;
 
@@ -16,7 +18,7 @@ public:
     inline int getHeight() const { return m_height; }
 
     inline bool checkIfAvailable() const { return isAvailable; }
-private:
+protected:
     bool isAvailable;
     unsigned int m_rendererID;
     std::string m_filepath;
