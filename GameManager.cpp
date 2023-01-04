@@ -55,11 +55,9 @@ void GameManager::onKeyPress(GLFWwindow* window, int key, int scancode, int acti
         glfwSetWindowShouldClose(glfwGetCurrentContext(), true);
     }
     if (key == GLFW_KEY_RIGHT && glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
-        std::cout << "Right key pressed" << std::endl;
         EVENTS::Events.push_back(Event(key, MOVE_OBJECT, RIGHT));
     }
     if (key == GLFW_KEY_LEFT && glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_LEFT) == GLFW_PRESS) {
-        std::cout << "Left key pressed" << std::endl;
         EVENTS::Events.push_back(Event(key, MOVE_OBJECT, LEFT));
     }
 }

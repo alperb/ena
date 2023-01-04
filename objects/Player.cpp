@@ -53,16 +53,13 @@ void Player::onCollision(Object* other) {
 }
 
 void Player::onMoveEvent(Event event) {
-    std::cout << "Player received move event at position " << this->currentPosition << std::endl;
     if(event.direction == RIGHT && this->currentPosition != 2){
         this->direction = RIGHT;
         this->isMoving = true;
-        // position = position + glm::vec3(5.0f, 0.0f, 0.0f);
         
     }
     else if(event.direction == LEFT && this->currentPosition != 0){
         this->direction = LEFT;
         this->isMoving = true;
-        // position = position + glm::vec3(-5.0f, 0.0f, 0.0f);
     }
 }
