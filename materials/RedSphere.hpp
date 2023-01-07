@@ -9,10 +9,9 @@ public:
     RedSphere(): Material("resources/shaders/RedSphere.hlsl", "") {};
     ~RedSphere() = default;
 
-    void setUniforms(Camera* camera, glm::mat4 modelVector) const override {
+    void setUniforms(Camera* camera, glm::mat4 modelVector, float ambient) const override {
         shader->setUniformMat4f("u_MVP", camera->getMVP(modelVector));
         shader->setUniform4f("u_Color", 1.0f, 0.0f, 0.0f, 1.0f);
-        shader->setUniformVec3f("u_lightPos", glm::vec3(0.0f, 0.0f, 0.0f));
         shader->setUniformVec3f("u_viewPos", camera->getPosition());
     };
 };

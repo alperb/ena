@@ -10,21 +10,15 @@ Material::Material(const std::string& shader_path, const std::string& texture_pa
     texture = new Texture(texture_path);
 }
 
-// its a cubemap
-Material::Material(const std::string& shader_path, const std::vector<std::string>& texture_paths) {
-    shader = new Shader(shader_path);
-    texture = new CubeMap(texture_paths);
-}
-
 Material::~Material() {
     delete shader;
     delete texture;
 }
 
-void Material::bind(Camera* camera, glm::mat4 modelVector) const {
+void Material::bind(Camera* camera, glm::mat4 modelVector, float ambient) const {
     shader->bind();
     texture->bind();
-    this->setUniforms(camera, modelVector);
+    this->setUniforms(camera, modelVector, ambient);
 }
 
 void Material::unbind() const {

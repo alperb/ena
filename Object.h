@@ -10,7 +10,7 @@ class Object {
 public:
     Object(std::string meshPath);
     virtual ~Object() = 0;
-    void draw(Camera* camera);
+    void draw(Camera* camera, float ambient);
 
     void setMaterial(Material* material);
     void createCollider();
@@ -26,6 +26,7 @@ public:
     Collider* getCollider() const;
     void updateCollider();
     std::string getName() const { return name; }
+    void setName(std::string name) { this->name = name; }
     virtual void onMoveEvent(Event event) = 0;
 protected:
     virtual void onUpdate() = 0;
@@ -41,4 +42,6 @@ protected:
     bool lightSource = false;
 
     std::string name;
+
+    friend class Scene;
 };

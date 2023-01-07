@@ -6,6 +6,7 @@ layout(location=1) in vec3 normals;
 layout(location=2) in vec2 textCoords;
 
 uniform mat4 u_MVP;
+uniform mat4 u_Model;
 
 out vec3 v_Normal;
 out vec3 v_localPosition;
@@ -14,8 +15,8 @@ out vec2 v_TexCoord;
 void main()
 {
     gl_Position = u_MVP * vec4(position, 1.0);
-    v_Normal = normals;
-    v_localPosition = position;
+    v_Normal = vec3(u_Model * vec4(normals, 1.0));
+    v_localPosition = vec3(u_MVP * vec4(position, 1.0));
     v_TexCoord = textCoords;
 }
 
@@ -34,12 +35,13 @@ uniform vec3 u_viewPos;
 uniform vec4 u_diffuseColor;
 uniform float u_shininess;
 uniform vec4 u_specularColor;
+uniform vec4 u_Color;
+uniform float u_ambientStrength;
 
 void main()
 {
-    float ambientStrength = 0.1;
     vec3 lightColor = vec3(1.0, 1.0, 1.0);
-    vec3 ambient = ambientStrength * lightColor;
+    vec3 ambient = u_ambientStrength * vec3(u_Color);
     
     vec3 norm = normalize(v_Normal);
     vec3 lightDir = normalize(u_lightPos - v_localPosition);

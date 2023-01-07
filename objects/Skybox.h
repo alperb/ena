@@ -1,14 +1,9 @@
 #include <glm/glm.hpp>
-#include "../Object.h"
+#include "../CubeMap.h"
 
-class Skybox : public Object {
+class Skybox : public CubeMap {
 public:
     Skybox();
     ~Skybox() = default;
-
-    void onUpdate() override;
-    void move(glm::vec3 direction) override;
-    void onCollision(Object* other) override;
-    void onMoveEvent(Event event) override;
 private:
 };

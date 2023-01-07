@@ -4,7 +4,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 lookAt, glm::vec3 up): position(pos
     updateDirection();
 }
 
-Camera::Camera(): position(glm::vec3(0, 0, 0)), lookAt(glm::vec3(0, 0, 0)), up(glm::vec3(0, 0, 0)) {
+Camera::Camera(): position(glm::vec3(0, 0, 0)), lookAt(glm::vec3(0, 0, -1)), up(glm::vec3(0, 1, 0)) {
     updateDirection();
 }
 
@@ -45,7 +45,12 @@ glm::vec3 Camera::getUp() const {
 }
 
 glm::mat4 Camera::getProjectionMatrix() const {
-    return glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+    float FOV = 45.0f;
+    float nearPlane = 1.0f;
+    float farPlane = 100.0f;
+    float aspectRatio = 4.0f / 3.0f;
+
+    return glm::perspective(glm::radians(FOV), aspectRatio, nearPlane, farPlane);
 }
 
 glm::mat4 Camera::getViewMatrix() const {

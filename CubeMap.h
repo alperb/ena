@@ -5,14 +5,19 @@
 #include <iostream>
 
 #include "vendors/stb_image/stb_image.h"
-#include "Texture.h"
+#include "Shader.h"
 
-class CubeMap : public Texture {
+class CubeMap {
 public:
     CubeMap(std::vector<std::string> faces);
-    ~CubeMap();
+    CubeMap() = default;
+    ~CubeMap() = default;
 
-    void load() override;
-private:
+    void load();
+    void bind() const;
+    void unbind() const;
+protected:
+    unsigned int textureID;
     std::vector<std::string> faces;
+    Shader* shader;
 };

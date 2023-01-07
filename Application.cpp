@@ -9,6 +9,7 @@ Application::Application(const std::string& title, unsigned int width, unsigned 
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_SAMPLES, 4);
         glfwSetErrorCallback(Application::catchErr);
         
         this->window = glfwCreateWindow(this->width, this->height, this->title.c_str(), NULL, NULL);
@@ -33,6 +34,7 @@ Application::Application(const std::string& title, unsigned int width, unsigned 
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
         GLCall(glEnable(GL_BLEND));
         GLCall(glEnable(GL_DEPTH_TEST));
+        GLCall(glEnable(GL_MULTISAMPLE));  
 
         gameManager = new GameManager();
         

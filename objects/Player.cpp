@@ -1,13 +1,16 @@
 #include <math.h>
 #include <iostream>
 #include "Player.h"
+#include "../materials/Player.hpp"
 
 Player::Player(glm::vec3 center) : 
     Object("blender/square.obj") { 
         this->position = center;
-        this->name = "Player";
-        this->rotationAxis = glm::vec3(1.0f, 1.0f, 1.0f);
+        this->setName("Player");
+        this->rotationAxis = glm::vec3(0.0f, 0.0f, 1.0f);
+        this->rotationAngle = 0.0f;
         this->initialPosition = center;
+        this->setMaterial(new PlayerMaterial());
 }
 
 Player::~Player() {
@@ -33,10 +36,10 @@ void Player::onUpdate() {
         glm::vec3 target = this->initialPosition + glm::vec3(th, 0.0f, 0.0f);
 
         if(this->direction == RIGHT && this->position.x <= target.x){
-            this->position += glm::vec3(0.4f, 0.0f, 0.0f);
+            this->position += glm::vec3(0.8f, 0.0f, 0.0f);
         }
         else if(this->direction == LEFT && this->position.x >= target.x){
-            this->position += glm::vec3(-0.4f, 0.0f, 0.0f);
+            this->position += glm::vec3(-0.8f, 0.0f, 0.0f);
         }
         else{
             this->currentPosition += (this->direction == RIGHT ? 1 : -1);

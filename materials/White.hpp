@@ -14,18 +14,19 @@ public:
     };
     ~WhiteObject() = default;
 
-    void setUniforms(Camera* camera, glm::mat4 modelVector) const override {
+    void setUniforms(Camera* camera, glm::mat4 modelVector, float ambientStrength) const override {
         shader->setUniformMat4f("u_MVP", camera->getMVP(modelVector));
+        shader->setUniformMat4f("u_Model", modelVector);
 
         // set the uniform for texture coordinates
         shader->setUniform1i("u_Texture", 0);
         
-        // shader->setUniform4f("u_Color", ambient.r, ambient.g, ambient.b, 1.0f);
+        shader->setUniform4f("u_Color", ambient.r, ambient.g, ambient.b, 1.0f);
         shader->setUniform4f("u_specularColor", specular.r, specular.g, specular.b, 1.0f);
         shader->setUniform4f("u_diffuseColor", diffuse.r, diffuse.g, diffuse.b, 1.0f);
         shader->setUniform1f("u_shininess", shininess);
+        shader->setUniform1f("u_ambientStrength", ambientStrength);
 
-        shader->setUniformVec3f("u_lightPos", glm::vec3(0.0f, 10.0f, 0.0f));
         shader->setUniformVec3f("u_viewPos", camera->getPosition());
     };
 };

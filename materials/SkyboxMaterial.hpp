@@ -10,7 +10,7 @@ public:
     };
     ~SkyboxMaterial() = default;
 
-    void setUniforms(Camera* camera, glm::mat4 modelVector) const override {
+    void setUniforms(Camera* camera, glm::mat4 modelVector, float ambient) const override {
         shader->setUniformMat4f("u_Projection", camera->getProjectionMatrix());
 
         

@@ -13,8 +13,8 @@ Object::~Object() {
     delete collider;
 }
 
-void Object::draw(Camera* camera) {
-    material->bind(camera, this->getModelMatrix());
+void Object::draw(Camera* camera, float ambient) {
+    material->bind(camera, this->getModelMatrix(), ambient);
     mesh->draw();
 }
 

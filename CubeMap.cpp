@@ -1,11 +1,13 @@
 #include "CubeMap.h"
 
-CubeMap::CubeMap(std::vector<std::string> faces): Texture(faces[0]), faces(faces) {
+CubeMap::CubeMap(std::vector<std::string> faces) {
+    this->faces = faces;
+    this->load();
 }
 
 void CubeMap::load(){
-    glGenTextures(1, &this->m_rendererID);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, this->m_rendererID);
+    glGenTextures(1, &this->textureID);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->textureID);
 
     int width, height, nrChannels;
     for (unsigned int i = 0; i < faces.size(); i++)
@@ -29,5 +31,17 @@ void CubeMap::load(){
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    this->shader = new Shader("resources/shaders/skybox.hlsl");
+}
+
+void CubeMap::bind() const {
+    this->shader->bind();
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->textureID);
+}
+
+void CubeMap::unbind() const {
+    this->shader->unbind();
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 

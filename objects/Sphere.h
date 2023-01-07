@@ -9,7 +9,7 @@ public:
     void move(glm::vec3 direction) override;
     void onMoveEvent(Event event) override;
     void onCollision(Object* other) override;
-private:
+protected:
     int speed = 1;
     glm::vec3 center;
     float radius;

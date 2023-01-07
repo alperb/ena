@@ -9,8 +9,9 @@ uniform mat4 u_View;
 
 void main()
 {
-    TexCoords = aPos;
-    gl_Position = u_Projection * u_View * vec4(aPos, 1.0);
+    TexCoords = vec3(aPos.x, aPos.y, -aPos.z);
+    vec4 pos = u_Projection * u_View * vec4(aPos, 1.0);
+    gl_Position = pos.xyww;
 } 
 
 #shader fragment

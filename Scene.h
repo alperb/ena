@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Object.h"
+#include "CubeMap.h"
 #include "Camera.h"
 
 
@@ -19,10 +20,18 @@ public:
     void update();
 
     glm::vec3 getLightSourcePosition() const;
-    void setSkybox(Object* skybox);
+    void setSkybox(CubeMap* skybox);
     void draw() const;
+
+    void popEnemy();
+    void moveSun();
 private:
     Camera* camera;
     std::vector<Object*> objects;
-    Object* skybox;
+    CubeMap* skybox;
+    bool isDay = true;
+    float ambientStrength = 0.4f;
+    glm::vec3 lightPos = glm::vec3(0.0f);
+
+    friend class GameManager;
 };
