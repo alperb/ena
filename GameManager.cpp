@@ -14,6 +14,8 @@ void GameManager::update() {
     checkCollisions();
     processEvents();
     pollEnemySpawn();
+
+    // check for day/night cycle
     if(scene->isDay){
         if(scene->ambientStrength > 0.01f){
             scene->ambientStrength -= 0.001f;

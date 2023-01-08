@@ -48,6 +48,14 @@ bool Collider::isColliding(Collider* other) {
 }
 
 void Collider::updateBox(std::vector<float> positions, glm::mat4 modelMatrix) {
+    // std::vector<float> computedPositions;
+    // for (int i = 0; i < positions.size(); i += 3) {
+    //     glm::vec4 position = glm::vec4(positions[i], positions[i + 1], positions[i + 2], 1.0f);
+    //     position = modelMatrix * position;
+    //     computedPositions.push_back(position.x);
+    //     computedPositions.push_back(position.y);
+    //     computedPositions.push_back(position.z);
+    // }
     computeBoundingBox(positions);
     aabb->updateBox(modelMatrix);
 }

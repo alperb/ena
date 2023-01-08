@@ -7,7 +7,7 @@ Player::Player(glm::vec3 center) :
     Object("blender/square.obj") { 
         this->position = center;
         this->setName("Player");
-        this->rotationAxis = glm::vec3(0.0f, 0.0f, 1.0f);
+        this->rotationAxis = glm::vec3(1.0f, 0.0f, 0.0f);
         this->rotationAngle = 0.0f;
         this->initialPosition = center;
         this->setMaterial(new PlayerMaterial());

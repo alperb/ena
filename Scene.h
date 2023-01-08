@@ -29,9 +29,12 @@ private:
     Camera* camera;
     std::vector<Object*> objects;
     CubeMap* skybox;
-    bool isDay = true;
     float ambientStrength = 0.4f;
-    glm::vec3 lightPos = glm::vec3(0.0f);
+    glm::vec3 lightPos = glm::vec3(5.0f);
+
+    bool isDay = true;
+    bool isSunset = true;
+    bool isSundown = false;
 
     friend class GameManager;
 };

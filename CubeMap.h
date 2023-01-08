@@ -6,6 +6,10 @@
 
 #include "vendors/stb_image/stb_image.h"
 #include "Shader.h"
+#include "VertexArray.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+#include "Camera.h"
 
 class CubeMap {
 public:
@@ -16,8 +20,16 @@ public:
     void load();
     void bind() const;
     void unbind() const;
+    void draw(Camera* camera) const;
 protected:
+
+    void initObject();
+
     unsigned int textureID;
     std::vector<std::string> faces;
     Shader* shader;
+
+    VertexArray* vao;
+    VertexBuffer* vbo;
+    IndexBuffer* ibo;
 };

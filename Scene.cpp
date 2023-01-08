@@ -31,9 +31,9 @@ Camera* Scene::getCamera() const {
 void Scene::draw() const {
     glDepthMask(GL_FALSE);
 
-    // if (skybox != nullptr) {
-    //     skybox->bind(camera, ambientStrength);
-    // }
+    if (skybox != nullptr) {
+        skybox->draw(this->camera);
+    }
 
     glDepthMask(GL_TRUE);
     for (Object* object : objects) {
@@ -44,16 +44,42 @@ void Scene::draw() const {
 
 void Scene::moveSun(){
     if(isDay){
-        lightPos.x += 0.01f;
-        lightPos.y += 0.01f;
-        if(lightPos.x >= 10.0f && lightPos.y >= 10.0f){
-            isDay = false;
+        if(this->isSunset) {
+            lightPos.x -= 0.01f;
+            lightPos.y += 0.01f;
+            if(lightPos.x <= 0.0f && lightPos.y >= 10.0f){
+                this->isSunset = false;
+                this->isSundown = true;
+            }
         }
-    }else{
-        lightPos.x -= 0.01f;
-        lightPos.y -= 0.01f;
-        if(lightPos.x <= -10.0f && lightPos.y <= -10.0f){
-            isDay = true;
+        else if(this->isSundown) {
+            lightPos.x -= 0.01f;
+            lightPos.y -= 0.01f;
+            if(lightPos.x <= -5.0f && lightPos.y <= 5.0f){
+                this->isSundown = false;
+                this->isSunset = true;
+                this->isDay = false;
+            }
+        }
+        
+    }
+    else {
+        if(this->isSunset){
+            lightPos.x += 0.01f;
+            lightPos.y += 0.01f;
+            if(lightPos.x >= 0.0f && lightPos.y >= 10.0f){
+                this->isSunset = false;
+                this->isSundown = true;
+            }
+        }
+        else if(this->isSundown){
+            lightPos.x += 0.01f;
+            lightPos.y -= 0.01f;
+            if(lightPos.x >= 5.0f && lightPos.y <= 5.0f){
+                this->isSundown = false;
+                this->isSunset = true;
+                this->isDay = true;
+            }
         }
     }
 }

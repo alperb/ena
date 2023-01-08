@@ -6,12 +6,12 @@ out vec3 TexCoords;
 
 uniform mat4 u_Projection;
 uniform mat4 u_View;
+uniform mat4 u_Scale;
 
 void main()
 {
-    TexCoords = vec3(aPos.x, aPos.y, -aPos.z);
-    vec4 pos = u_Projection * u_View * vec4(aPos, 1.0);
-    gl_Position = pos.xyww;
+    TexCoords = aPos;
+    gl_Position = u_Projection * u_View * u_Scale * vec4(aPos, 1.0);
 } 
 
 #shader fragment

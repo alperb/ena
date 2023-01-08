@@ -27,9 +27,6 @@ void Shader::unbind() const {
 }
 
 
-
-
-
 int Shader::getUniformLocation(const std::string& name) {
     if(this->m_uniformLocationCache.find(name) != this->m_uniformLocationCache.end()) {
         return this->m_uniformLocationCache[name];
