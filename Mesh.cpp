@@ -19,11 +19,11 @@ void Mesh::draw(){
     for(unsigned int i = 0; i < meshes.size(); i++) {
         const unsigned int materialIndex = meshes[i].materialIndex;
 
-        glDrawElementsBaseVertex(GL_TRIANGLES,
+        GLCall(glDrawElementsBaseVertex(GL_TRIANGLES,
             meshes[i].numIndices,
             GL_UNSIGNED_INT,
             (void*)(sizeof(unsigned int) * meshes[i].baseIndex),
-            meshes[i].baseVertex);
+            meshes[i].baseVertex));
     }
 
     vao->unbind();
