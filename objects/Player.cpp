@@ -11,6 +11,11 @@ Player::Player(glm::vec3 center) :
         this->rotationAngle = 0.0f;
         this->initialPosition = center;
         this->setMaterial(new PlayerMaterial());
+
+        // positions
+        this->positions[0] = glm::vec3(center.x - 5.0f, center.y, center.z);
+        this->positions[1] = glm::vec3(center.x, center.y, center.z);
+        this->positions[2] = glm::vec3(center.x + 5.0f, center.y, center.z);
 }
 
 Player::~Player() {
@@ -24,31 +29,18 @@ void Player::onUpdate() {
     this->rotationAngle += 0.01f;
 
     if(this->isMoving){
-        glm::vec3 thresholds = {
-            this->initialPosition.x - 5.0f,
-            this->initialPosition.x,
-            this->initialPosition.x + 5.0f
-        };
-        unsigned int index = this->currentPosition + (this->direction == RIGHT ? 1 : -1);
-        if(index < 0 || index > 2) return;
+        if(this->moveVector.x != 0.0f){
+            this->position = this->positions[this->currentPosition] + this->moveVector * this->t;
+            this->t += 0.1f;
 
-        float th = thresholds[index];
-        glm::vec3 target = this->initialPosition + glm::vec3(th, 0.0f, 0.0f);
-
-        if(this->direction == RIGHT && this->position.x <= target.x){
-            this->position += glm::vec3(0.8f, 0.0f, 0.0f);
-        }
-        else if(this->direction == LEFT && this->position.x >= target.x){
-            this->position += glm::vec3(-0.8f, 0.0f, 0.0f);
-        }
-        else{
-            this->currentPosition += (this->direction == RIGHT ? 1 : -1);
-            this->isMoving = false;
+            if(this->t >= 1.0f) {
+                this->currentPosition += (this->direction == RIGHT ? 1 : -1);
+                this->t = 0.0f;
+                this->moveVector = glm::vec3(0);
+                this->isMoving = false;
+            }
         }
     }
-
-    // move(moveVector);
-    // std::cout << "x" << center.x << " y" << center.y << " z" << center.z << std::endl;
 }
 
 void Player::onCollision(Object* other) {
@@ -56,13 +48,28 @@ void Player::onCollision(Object* other) {
 }
 
 void Player::onMoveEvent(Event event) {
+    float thresholds[3] = {
+        this->initialPosition.x - 5.0f,
+        this->initialPosition.x,
+        this->initialPosition.x + 5.0f
+    };
+
+    if(this->isMoving) return;
+
+    glm::vec3 rightVector = glm::vec3(5.5f, 0.0f, 0.0f);
+    glm::vec3 leftVector = glm::vec3(-5.5f, 0.0f, 0.0f);
+
     if(event.direction == RIGHT && this->currentPosition != 2){
         this->direction = RIGHT;
+        this->moveVector = rightVector;
+        this->t = 0.1f;
         this->isMoving = true;
         
     }
     else if(event.direction == LEFT && this->currentPosition != 0){
         this->direction = LEFT;
+        this->moveVector = leftVector;
+        this->t = 0.1f;
         this->isMoving = true;
     }
 }

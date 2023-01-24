@@ -12,7 +12,10 @@ public:
     void onMoveEvent(Event event) override;
 private:
     int currentPosition = 1;
+    glm::vec3 positions[3];
     glm::vec3 initialPosition;
     bool isMoving = false;
+    glm::vec3 moveVector;
+    float t = 0.0f;
     MOVE_DIRECTION direction;
 };
