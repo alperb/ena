@@ -1,15 +1,17 @@
 #include "GameManager.h"
 #include "objects/Enemy.h"
 
+
 GameManager::GameManager() {
     this->lastSpawnTime = std::chrono::steady_clock::now();
-    
+    this->hud = new HUD();
 }
 
 GameManager::~GameManager() {
 }
 
 void GameManager::update() {
+    this->hud->render("This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
     scene->update();
     checkCollisions();
     processEvents();

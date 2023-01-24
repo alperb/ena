@@ -2,6 +2,7 @@
 #include <chrono>
 #include "Renderer.h"
 #include <GLFW/glfw3.h>
+#include "HUD.h"
 #include <iostream>
 
 class GameManager {
@@ -23,4 +24,6 @@ private:
     void spawnMob();
     Scene* scene;
     std::chrono::time_point<std::chrono::steady_clock> lastSpawnTime;
+
+    HUD* hud;
 };
